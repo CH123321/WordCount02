@@ -42,6 +42,7 @@ export SPARK_DRIVE_MEMORY=2g
 ### 1.2 Edit host file
 $ sudo vi /etc/hosts  
 >127.0.0.1  namenode
+
 ***
 ### 1.3 Edit core-site.xml
 $ cd ~/Hadoop/etc/hadoop/  
@@ -52,6 +53,7 @@ $ vi core-site.xml
     <value>hdfs://namenode:9000</value>
 </property>
 ```
+
 ***
 ### 1.4 Edit hdfs-site.xml
 $ vi hdfs-site.xml
@@ -77,6 +79,7 @@ $ vi hdfs-site.xml
     <value>true</value>
 </property>
 ```
+
 ***
 ### 1.5 Edit mapred-site.xml
 $ cp mapred-site.xml.template mapred-site.xml  
@@ -87,6 +90,7 @@ $ vi mapred-site.xml
     <value>hdfs://namenode:9000</value>
 </property>
 ```
+
 ***
 ### 1.6 Edit yarn-site.xml
 $ vi yarn-site.xml
@@ -104,14 +108,13 @@ $ vi yarn-site.xml
     <value>4</value>
 </property>
 ```
+
 ***
 ### 1.7 Edit slave
 $ vi slaves
 >localhost  
 
-<br></br>
-<br></br>
-***
+
 ***
 ## 2. Write wordCount2.py Code
 ```python  
@@ -195,9 +198,7 @@ results = wordCounts.collect()
 printResult(results)
 ```
 
-<br></br>
-<br></br>
-***
+
 ***
 ## 3. Start the Spark Cluster
 At first, uplode the wordCount2.py and *input.txt* to ~/Spark/HW2

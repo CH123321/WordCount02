@@ -1,4 +1,4 @@
-#WordCount2
+# WordCount2
 
 ## 1. Spark configuration
 ### 1.1 Configure Environment

@@ -1,120 +1,3 @@
-#WordCount2
-
-## 1. Spark configuration
-### 1.1 Configure Environment
-1.1.1 Edit .bashrc  
-$ vi ~/.bashrc
-```
-#JAVA ENV
-export JAVA_HOME=~/Java
-export JRE_HOME=$JAVA_HOME/jre
-export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:JRE_HOME/lib
-export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
-
-#Hadoop ENV
-export HADOOP_HOME=~/Hadoop
-export HADOOP_INSTALL=$HADOOP_HOME
-export HADOOP_MAPRED_HOME=$HADOOP_HOME
-export HADOOP_COMMON_HOME=$HADOOP_HOME
-export HADOOP_HDFS_HOME=$HADOOP_HOME
-export YARN_HOME=$HADOOP_HOME
-export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
-export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
-
-#Sprak ENV
-export SPARK_HOME=~/Spark/
-export PATH=$PATH:$SPARK_HOME/bin
-```
-source ~/.bashrc  
-
-1.1.2 Edit spark-env.sh  
-$ cd ~/Spark/conf/  
-$ cp spark-env.sh.template spark-env.sh  
-$ vi spark-env.sh
-```
-export SPARK_WORKER_CORES=2
-export SPARK_WORKER_MEMORY=4g
-export SPARK_WORKER_INSTANCES=2
-export SPARK_EXECUTOR_MEMORY=2g
-export SPARK_DRIVE_MEMORY=2g
-```
-***
-### 1.2 Edit host file
-$ sudo vi /etc/hosts  
->127.0.0.1  namenode
-***
-### 1.3 Edit core-site.xml
-$ cd ~/Hadoop/etc/hadoop/  
-$ vi core-site.xml
-```
-<property>
-    <name>fs.defaultFS</name>
-    <value>hdfs://namenode:9000</value>
-</property>
-```
-***
-### 1.4 Edit hdfs-site.xml
-$ vi hdfs-site.xml
-```
-<property>
-    <name>dfs.replication</name>
-    <value>1</value>
-</property>
-<property>
-    <name>dfs.name.dir</name>
-    <value>/home/huang/data/namenode</value>
-</property>
-<property>
-    <name>dfs.data.dir</name>
-    <value>/home/huang/data/datanode</value>
-</property>
-<property>
-    <name>dfs.namenode.secondary.http-address</name>
-    <value>namenode:50090</value>
-</property>
-<property>
-    <name>dfs.webhdfs.enabled</name>
-    <value>true</value>
-</property>
-```
-***
-### 1.5 Edit mapred-site.xml
-$ cp mapred-site.xml.template mapred-site.xml  
-$ vi mapred-site.xml
-```
-<property>
-    <name>fs.defaultFS</name>
-    <value>hdfs://namenode:9000</value>
-</property>
-```
-***
-### 1.6 Edit yarn-site.xml
-$ vi yarn-site.xml
-```
-<property>
-    <name>yarn.nodemanager.aux-services</name>
-    <value>mapreduce_shuffle</value>
-</property>
-<property>
-    <name>yarn.nodemanager.resource.memory-mb</name>
-    <value>9124</value>
-</property>
-<property>
-    <name>yarn.nodemanager.resource.cpu-vcores</name>
-    <value>4</value>
-</property>
-```
-***
-### 1.7 Edit slave
-$ vi slaves
->localhost  
-
-<br></br>
-<br></br>
-***
-***
-## 2. Write wordCount2.py Code
-```python  
 from pyspark import SparkContext
 import re, sys
 
@@ -146,7 +29,7 @@ def line2wordsPair(line):
 						# creat two tuples to store the word pairs. eg: (a,b) and (b,a)
                         key1 = (word1, word2)
                         key2 = (word2, word1)
-					    # append the key pairs to the list
+						# append the key pairs to the list
                         keyPairs.append(key1)
                         keyPairs.append(key2)
 		# remember the word which has been mapped
@@ -193,26 +76,3 @@ wordCounts = textfile.flatMap(line2wordsPair).map(lambda pair: (pair,1)).reduceB
 results = wordCounts.collect()
 # print the result to file
 printResult(results)
-```
-
-<br></br>
-<br></br>
-***
-***
-## 3. Start the Spark Cluster
-At first, uplode the wordCount2.py and *input.txt* to ~/Spark/HW2
-
-
-Then, launch the Spark services
-
-![picture01](img/01.png)  
-Here is the Spark web UI
-
-![picture02](img/02.png)  
-After we excute the **word count** command, an application has been created.
-![picture03](img/03.png)  
-![picture04](img/04.png)  
-
-Finally, we got the result.
-
-![picture05](img/05.png)  

@@ -62,7 +62,7 @@ def printResult(result):
     f.close()   
 
 # set the master addres and Application name
-sc = sc = SparkContext("spark://localhost:7077","Word Count 2")
+sc = SparkContext("spark://localhost:7077","Word Count 2")
 # load the file
 textfile = sc.textFile(sys.argv[1])
 # get the the output
